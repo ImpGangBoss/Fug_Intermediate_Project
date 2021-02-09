@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
 #include <chrono>
 #include <ctime> 
 
@@ -9,6 +10,12 @@ class Character
 public:
 	std::string GetName() { return this->name; }
 	std::string GetId() { return this->id; }
+
+	friend bool operator == (const Character& obj1, const Character& obj2)
+	{
+		if (obj1.name == obj2.name && obj1.name == obj2.name)
+			return true;
+	}
 
 protected:
 	std::string name;
@@ -20,6 +27,8 @@ class Player : public Character
 public:
 	Player() {};
 	Player(std::string name, std::string id, int rank);
+
+	int GetRank() { return this->rank; }
 
 private:
 	int rank;
@@ -36,17 +45,20 @@ class Hero : public Character
 {
 public:
 	Hero() {};
-	Hero(std::string hr_name, std::string hr_id, int damage, int hp);
+	Hero(std::string name, std::string id, int damage, int hp);
+
+	int GetDamage() { return this->damage; }
+	int GetHP() { return this->hp; }
 
 private:
 	int damage;
 	int hp;
 };
 
-Hero::Hero(std::string hr_name, std::string hr_id, int damage, int hp)
+Hero::Hero(std::string name, std::string id, int damage, int hp)
 {
-	this->name = hr_name;
-	this->id = hr_id;
+	this->name = name;
+	this->id = id;
 	this->damage = damage;
 	this->hp = hp;
 }
@@ -55,28 +67,93 @@ class PlayerManager
 {
 public:
 	PlayerManager() {};
-	Player CreatePlayer(std::string name, std::string id, int rank);
+
+	void SetPlayersList(std::list<Player> user_players_list) { this->players_list = user_players_list; }
+
 	Player GetPlayerByName(std::string name);
 	Player GetPlayerById(std::string id);
-	void DeletePlayer(Player plr_to_dlt);
-	void ShowPlayerInfo(Player plr_to_shw);
+	Player CreatePlayer(std::string name, std::string id, int rank) { return Player(name, id, rank); }
+	void ShowPlayerInfo(Player& player_to_show);
+
+private:
+	std::list<Player> players_list;
 };
+
+Player PlayerManager::GetPlayerByName(std::string name)
+{
+	for (auto i : this->players_list)
+		if (i.GetName() == name)
+			return i;
+}
+
+
+Player PlayerManager::GetPlayerById(std::string id)
+{
+	for (auto i : this->players_list)
+		if (i.GetName() == id)
+			return i;
+}
+
+void PlayerManager::ShowPlayerInfo(Player& player_to_show)
+{
+	for (auto i: this->players_list)
+		if (i == player_to_show)
+		{
+			std::cout << "Name: \t" << i.GetName() << std::endl;
+			std::cout << "Id:   \t" << i.GetId() << std::endl;
+			std::cout << "Rank: \t" << i.GetRank() << std::endl;
+		}
+}
 
 class HeroManager
 {
 public:
 	HeroManager() {};
-	Hero CreateHero(std::string name, std::string id, int damage, int hp);
+
+	void SetHeroList(std::list<Hero> user_hero_list) { this->hero_list = user_hero_list; }
+
 	Hero GetHeroByName(std::string name);
 	Hero GetHeroById(std::string id);
-	void DeleteHero(Hero plr_to_dlt);
-	void ShowHeroInfo(Hero plr_to_shw);
+	Hero CreateHero(std::string name, std::string id, int damage, int hp) { return Hero(name, id, damage, hp); }
+	void ShowHeroInfo(Hero& hero_to_show);
+
+private:
+	std::list<Hero> hero_list;
 };
+
+Hero HeroManager::GetHeroByName(std::string name)
+{
+	for (auto i : this->hero_list)
+		if (i.GetName() == name)
+			return i;
+}
+
+
+Hero HeroManager::GetHeroById(std::string id)
+{
+	for (auto i : this->hero_list)
+		if (i.GetName() == id)
+			return i;
+}
+
+void HeroManager::ShowHeroInfo(Hero& hero_to_show)
+{
+	for (auto i : this->hero_list)
+		if (i == hero_to_show)
+		{
+			std::cout << "Name:   \t" << i.GetName() << std::endl;
+			std::cout << "Id:     \t" << i.GetId() << std::endl;
+			std::cout << "Damage: \t" << i.GetDamage() << std::endl;
+			std::cout << "HP:     \t" << i.GetHP() << std::endl;
+		}
+}
 
 class Team
 {
 public:
 	Team() {};
+	void MakePair(Player& player, Hero& hero) { this->team.push_back(std::make_pair(player, hero)); }
+
 private:
 	std::string name;
 	std::vector<std::pair <Player, Hero>> team;
@@ -85,16 +162,32 @@ private:
 class TeamManager
 {
 public:
-	Team GenerateNewTeam();
+	Team GenerateNewTeam(std::list<Player> player_list, std::list<Hero> hero_list, Team previous_team = {});
 	void GetTeamInfo();
+
+private:
+	std::list<Team> list_of_teams;
+	const int team_size = 5;
 };
+
+Team TeamManager::GenerateNewTeam(std::list<Player> player_list, std::list<Hero> hero_list, Team previous_team)
+{
+	Team new_team;
+
+	/*for (int j = 0; j < this->team_size; ++j)
+		new_team.MakePair(std::advance(player_list.begin(), j), std::advance(hero_list.begin(), j));*/
+
+	return new_team;
+}
+
+
 
 class Session
 {
 public:
 	Session() {};
-	Session(Team team_one, Team team_two, Team winner);
-	Team CalculateWinner(Team team_one, Team team_two);
+	Session(Team& team_one, Team& team_two);
+	Team CalculateWinner(Team& team_one, Team& team_two);
 
 private:
 	std::time_t strt_time;
@@ -103,7 +196,7 @@ private:
 		winner;
 };
 
-Session::Session(Team team_one, Team team_two, Team winner)
+Session::Session(Team& team_one, Team& team_two)
 {
 	this->strt_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	this->team_one = team_one;
@@ -123,6 +216,7 @@ private:
 
 int main()
 {
+	std::srand(std::time(nullptr));
 
 	system("pause >> void");
 	return 0;
