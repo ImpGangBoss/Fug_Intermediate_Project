@@ -1,9 +1,8 @@
 ﻿  Source.cpp
-d:\fugas vitalii boiko\fugas int_pro c++\fug_intermediate_project\multiplayer_game_sim\multiplayer_game_sim\source.cpp(220): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-d:\fugas vitalii boiko\fugas int_pro c++\fug_intermediate_project\multiplayer_game_sim\multiplayer_game_sim\source.cpp(87): warning C4715: 'PlayerManager::GetPlayerByName': not all control paths return a value
-d:\fugas vitalii boiko\fugas int_pro c++\fug_intermediate_project\multiplayer_game_sim\multiplayer_game_sim\source.cpp(137): warning C4715: 'HeroManager::GetHeroById': not all control paths return a value
-d:\fugas vitalii boiko\fugas int_pro c++\fug_intermediate_project\multiplayer_game_sim\multiplayer_game_sim\source.cpp(95): warning C4715: 'PlayerManager::GetPlayerById': not all control paths return a value
-d:\fugas vitalii boiko\fugas int_pro c++\fug_intermediate_project\multiplayer_game_sim\multiplayer_game_sim\source.cpp(129): warning C4715: 'HeroManager::GetHeroByName': not all control paths return a value
+d:\fugas vitalii boiko\fugas int_pro c++\fug_intermediate_project\multiplayer_game_sim\multiplayer_game_sim\source.cpp(350): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\fugas vitalii boiko\fugas int_pro c++\fug_intermediate_project\multiplayer_game_sim\multiplayer_game_sim\source.cpp(98): warning C4715: 'PlayerManager::GetPlayerByName': not all control paths return a value
+d:\fugas vitalii boiko\fugas int_pro c++\fug_intermediate_project\multiplayer_game_sim\multiplayer_game_sim\source.cpp(151): warning C4715: 'HeroManager::GetHeroByName': not all control paths return a value
+d:\fugas vitalii boiko\fugas int_pro c++\fug_intermediate_project\multiplayer_game_sim\multiplayer_game_sim\source.cpp(159): warning C4715: 'HeroManager::GetHeroById': not all control paths return a value
+d:\fugas vitalii boiko\fugas int_pro c++\fug_intermediate_project\multiplayer_game_sim\multiplayer_game_sim\source.cpp(106): warning C4715: 'PlayerManager::GetPlayerById': not all control paths return a value
 d:\fugas vitalii boiko\fugas int_pro c++\fug_intermediate_project\multiplayer_game_sim\multiplayer_game_sim\source.cpp(18): warning C4715: 'operator==': not all control paths return a value
-Source.obj : error LNK2019: unresolved external symbol "public: class Team __thiscall Session::CalculateWinner(class Team &,class Team &)" (?CalculateWinner@Session@@QAE?AVTeam@@AAV2@0@Z) referenced in function "public: __thiscall Session::Session(class Team &,class Team &)" (??0Session@@QAE@AAVTeam@@0@Z)
-D:\FUGAS Vitalii Boiko\FUGAS int_pro C++\Fug_Intermediate_Project\Multiplayer_game_sim\Debug\Multiplayer_game_sim.exe : fatal error LNK1120: 1 unresolved externals
+  Multiplayer_game_sim.vcxproj -> D:\FUGAS Vitalii Boiko\FUGAS int_pro C++\Fug_Intermediate_Project\Multiplayer_game_sim\Debug\Multiplayer_game_sim.exe
