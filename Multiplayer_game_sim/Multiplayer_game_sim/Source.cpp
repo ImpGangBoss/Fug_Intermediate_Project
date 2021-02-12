@@ -30,8 +30,7 @@ public:
 	Player(std::string name, std::string id, int rank);
 
 	int GetRank() { return this->rank; }
-	void RankUp() { this->rank = this->rank + 25; }
-	void RankDown() { this->rank = this->rank - 25; }
+	void SetRank(int new_rank) { this->rank = new_rank; }
 
 private:
 	int rank;
@@ -75,15 +74,25 @@ public:
 	std::list<Player> GetPlayerList() { return this->player_list; }
 	Player GetPlayerByName(std::string name);
 	Player GetPlayerById(std::string id);
-	Player CreatePlayer(std::string name, std::string id, int rank);
-	void DeletePlayer(Player& player_to_delete) { this->player_list.remove(player_to_delete); }
-	void ShowPlayerInfo(const Player& player_to_show);
+	//Player PlayerManager::CreatePlayer(std::string name, std::string id, int rank) { return Player(name, id, rank); }
+	//void DeletePlayer(Player& player_to_delete) { this->player_list.remove(player_to_delete); }
+	void ShowPlayerInfo(Player& player_to_show);
+	void RankUp(Player& player);
+	void RankDown(Player& player);
 
 private:
 	std::list<Player> player_list;
 };
 
-Player PlayerManager::CreatePlayer(std::string name, std::string id, int rank) { return Player(name, id, rank); }
+void PlayerManager::RankUp(Player& player)
+{
+	player.SetRank(player.GetRank() + 25);
+}
+
+void PlayerManager::RankDown(Player& player)
+{
+	player.SetRank(player.GetRank() - 25);
+}
 
 void PlayerManager::SetPlayersList()
 {
@@ -106,15 +115,15 @@ Player PlayerManager::GetPlayerById(std::string id)
 			return i;
 }
 
-void PlayerManager::ShowPlayerInfo(const Player& player_to_show)
+void PlayerManager::ShowPlayerInfo(Player& player_to_show)
 {
 	for (auto i : this->player_list)
 		if (i == player_to_show)
 		{
 			std::cout << "--------------------------------" << std::endl;
-			std::cout << "Name: \t" << i.GetName() << std::endl;
-			std::cout << "Id:   \t" << i.GetId() << std::endl;
-			std::cout << "Rank: \t" << i.GetRank() << std::endl;
+			std::cout << "Name: \t" << player_to_show.GetName() << std::endl;
+			std::cout << "Id:   \t" << player_to_show.GetId() << std::endl;
+			std::cout << "Rank: \t" << player_to_show.GetRank() << std::endl;
 			std::cout << "--------------------------------" << std::endl;
 
 			break;
@@ -128,15 +137,16 @@ public:
 
 	void SetHeroList();
 	std::list<Hero> GetHeroList() { return this->hero_list; }
-	Hero GetHeroByName(std::string name);
-	Hero GetHeroById(std::string id);
-	Hero CreateHero(std::string name, std::string id, int damage, int hp) { return Hero(name, id, damage, hp); }
-	void DeleteHero(Hero& hero_to_delete) { this->hero_list.remove(hero_to_delete); }
-	void ShowHeroInfo(Hero& hero_to_show);
+	//Hero GetHeroByName(std::string name);
+	//Hero GetHeroById(std::string id);
+	//Hero CreateHero(std::string name, std::string id, int damage, int hp) { return Hero(name, id, damage, hp); }
+	//void DeleteHero(Hero& hero_to_delete) { this->hero_list.remove(hero_to_delete); }
+	//void ShowHeroInfo(Hero& hero_to_show);
 
 private:
 	std::list<Hero> hero_list;
 };
+
 
 void HeroManager::SetHeroList()
 {
@@ -144,6 +154,7 @@ void HeroManager::SetHeroList()
 		this->hero_list.push_back(Hero("Hero" + std::to_string(i), "0" + std::to_string(i), rand() % 100 + 3, rand() % 100 + 20));
 }
 
+/*
 Hero HeroManager::GetHeroByName(std::string name)
 {
 	for (auto i : this->hero_list)
@@ -174,6 +185,7 @@ void HeroManager::ShowHeroInfo(Hero& hero_to_show)
 			break;
 		}
 }
+*/
 
 class Team
 {
@@ -181,10 +193,13 @@ public:
 	Team() {};
 	Team(std::string team_name) { this->name = team_name; }
 	void MakePair(Player& player, Hero& hero) { this->team.push_back(std::make_pair(player, hero)); }
-	std::vector<std::pair <Player, Hero>> GetTeam() { return this->team; }
+	auto GetTeam() { return this->team; }
 	auto GetTeamName() { return this->name; }
+	void MakeWinner() { this->winner = true; }
+	bool IsWinner() { return this->winner; }
 
 protected:
+	bool winner = false;
 	std::string name;
 	std::vector<std::pair <Player, Hero>> team;
 };
@@ -194,7 +209,8 @@ class TeamManager
 public:
 	void GenerateNewTeams(std::list<Player> player_list, std::list<Hero> hero_list);
 	auto GetTwoTeams(int team_pair_index) { return this->list_of_teams[team_pair_index]; }
-	void GetTeamsInfo(Team team);
+	Team ChangeTeamRank(Team& team, PlayerManager& player_manager);
+	void GetTeamInfo(Team team);
 
 protected:
 	std::vector<std::pair<Team, Team>> list_of_teams;
@@ -203,15 +219,9 @@ protected:
 
 void TeamManager::GenerateNewTeams(std::list<Player> player_list, std::list<Hero> hero_list)
 {
-	std::string team_name1, team_name2;
 
-	std::cout << "Enter names of 2 teams: " << std::endl;
-
-	std::getline(std::cin, team_name1);
-	std::getline(std::cin, team_name2);
-
-	Team new_team_one(team_name1),
-		new_team_two(team_name2);
+	Team new_team_one("Team1"),
+		new_team_two("Team2");
 
 	std::vector<Player> player_vector;
 	std::vector<Hero> hero_vector;
@@ -245,10 +255,13 @@ void TeamManager::GenerateNewTeams(std::list<Player> player_list, std::list<Hero
 	this->list_of_teams.push_back(std::make_pair(new_team_one, new_team_two));
 }
 
-void TeamManager::GetTeamsInfo(Team team)
+void TeamManager::GetTeamInfo(Team team)
 {
 	std::cout << "*************************************************" << std::endl;
-	std::cout << "Team Name: \t" << team.GetTeamName() << std::endl;
+	std::cout << "Team Name: \t" << team.GetTeamName();
+	if (team.IsWinner())
+		std::cout << "    (Winner)";
+	std::cout << std::endl;
 	std::cout <<  "Player id | Player name | Player rank | Hero" << std::endl;
 	for (auto& j : team.GetTeam())
 	{
@@ -267,6 +280,7 @@ public:
 	Session(std::pair<Team, Team> team_pair);
 	Team CalculateWinner(Team& team_one, Team& team_two);
 	Team GetWinner() { return this->winner; }
+	Team GetLooser() { return this->looser; }
 	Team GetFirstTeam() { return this->team_one; }
 	Team GetSecondTeam() { return this->team_two; }
 	time_t GetSessionTime() { return this->strt_time; }
@@ -275,14 +289,15 @@ private:
 	time_t strt_time;
 	Team team_one,
 		team_two,
-		winner;
+		winner,
+		looser;
 };
 
 Session::Session(std::pair<Team, Team> team_pair)
 {
 	this->strt_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-	this->team_one = team_one;
-	this->team_two = team_two;
+	this->team_one = std::get<0>(team_pair);
+	this->team_two = std::get<1>(team_pair);
 	this->winner = CalculateWinner(std::get<0>(team_pair), std::get<1>(team_pair));
 }
 
@@ -310,21 +325,13 @@ Team Session::CalculateWinner(Team& team_one, Team& team_two)
 
 	if (first_team_hp >= second_team_hp)
 	{
-		for (auto &i : team_one.GetTeam())
-			i.first.RankUp();
-
-		for (auto &j : team_two.GetTeam())
-			j.first.RankDown();
-
+		this->looser = team_two;
+		team_one.MakeWinner();
 		return team_one;
 	}
 
-	for (auto &i : team_one.GetTeam())
-		i.first.RankDown();
-
-	for (auto &j : team_two.GetTeam())
-		j.first.RankUp();
-
+	this->looser = team_one;
+	team_two.MakeWinner();
 	return team_two;
 }
 
@@ -338,9 +345,9 @@ public:
 	PlayerManager GetPlayerManager() { return this->player_manager; }
 	TeamManager GetTeamManager() { return this->team_manager; }
 	std::vector<Session> GetSessionList() { return this->game_sessions; }
-	void ShowSession(std::vector<Session> sessions);
+	//void ShowSession(std::vector<Session> sessions);
 	void ShowPlayers();
-	void ShowHeroes();
+	//void ShowHeroes();
 
 private:
 	std::vector<Session> game_sessions;
@@ -349,6 +356,7 @@ private:
 	PlayerManager player_manager;
 };
 
+/*
 void GameManager::ShowSession(std::vector<Session> sessions)
 {
 	for (auto& i : sessions)
@@ -360,85 +368,66 @@ void GameManager::ShowSession(std::vector<Session> sessions)
 			<< i.GetSessionTime() << std::endl;
 	}
 }
+*/
 
 void GameManager::ShowPlayers()
 {
-	for (auto i : this->player_manager.GetPlayerList())
-		player_manager.ShowPlayerInfo(i);
+	for (auto& i : this->player_manager.GetPlayerList())
+		this->player_manager.ShowPlayerInfo(i);
 }
 
+/*
 void GameManager::ShowHeroes()
 {
-	for (auto j : this->hero_manager.GetHeroList())
-		hero_manager.ShowHeroInfo(j);
+	for (auto& j : this->hero_manager.GetHeroList())
+		this->hero_manager.ShowHeroInfo(j);
 }
+*/
 
 void GameManager::PerformGameSession()
 {
 	this->hero_manager.SetHeroList();
 	this->player_manager.SetPlayersList();
 
-	ShowHeroes();
-	ShowPlayers();
+	//ShowPlayers();
+
+	/*
+	auto test_player = this->player_manager.GetPlayerByName("Player0");
+	this->player_manager.ShowPlayerInfo(test_player);
+	test_player.SetRank(120);
+	this->player_manager.ShowPlayerInfo(test_player);
+	this->player_manager.RankDown(test_player);
+	this->player_manager.ShowPlayerInfo(test_player);
+	*/
 
 	auto player_list = this->player_manager.GetPlayerList();
 	auto hero_list = this->hero_manager.GetHeroList();
 
 	this->team_manager.GenerateNewTeams(player_list, hero_list);
 
-	auto first_team = std::get<0>(this->team_manager.GetTwoTeams(0));
-	auto second_team = std::get<1>(this->team_manager.GetTwoTeams(0));
-
 	Session session(this->team_manager.GetTwoTeams(0));
-	this->team_manager.GetTeamsInfo(session.GetWinner());
+
+	this->team_manager.GetTeamInfo(session.GetWinner());
+
+	for (auto &i : session.GetWinner().GetTeam())
+		i.first.SetRank(i.first.GetRank() + 25);
+
+	for (auto& i : session.GetLooser().GetTeam())
+		i.first.SetRank(i.first.GetRank() - 25);
+
+	this->team_manager.GetTeamInfo(session.GetWinner());
 
 	this->game_sessions.push_back(session);
 
-	ShowSession(this->game_sessions);
-	ShowPlayers();
+	//ShowPlayers();
 }
 
-/*void MainMenu(GameManager &game)
-{
-	system("cls");
-
-	std::cout << "\t\tMain Menu" << std::endl;
-	std::cout << "(1) Start Game" << std::endl;
-	std::cout << "(2) Players" << std::endl;
-	std::cout << "(3) Heroes" << std::endl;
-	std::cout << "(4) Sessions" << std::endl;
-	std::cout << "(0) Exit" << std::endl;
-
-	int switcher = 0;
-	std::cin >> switcher;
-
-	switch (switcher)
-	{
-	case 1:
-		;
-		break;
-	case 2:
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	case 0:
-		exit(0);
-	default:
-		break;
-	}
-}
-*/
 int main()
 {
 	srand(time(nullptr));
 
 	GameManager game;
 	game.PerformGameSession();
-
-	/*while (true)
-		MainMenu(game);*/
 
 	system("pause >> void");
 	return 0;

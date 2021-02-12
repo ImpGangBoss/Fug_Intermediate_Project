@@ -1,8 +1,6 @@
 ﻿  Source.cpp
-E:\Projects\FuGaS C++\Fug_Intermediate_Project\Multiplayer_game_sim\Multiplayer_game_sim\Source.cpp(441,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-E:\Projects\FuGaS C++\Fug_Intermediate_Project\Multiplayer_game_sim\Multiplayer_game_sim\Source.cpp(101): warning C4715: 'PlayerManager::GetPlayerByName': not all control paths return a value
-E:\Projects\FuGaS C++\Fug_Intermediate_Project\Multiplayer_game_sim\Multiplayer_game_sim\Source.cpp(109): warning C4715: 'PlayerManager::GetPlayerById': not all control paths return a value
-E:\Projects\FuGaS C++\Fug_Intermediate_Project\Multiplayer_game_sim\Multiplayer_game_sim\Source.cpp(162): warning C4715: 'HeroManager::GetHeroById': not all control paths return a value
-E:\Projects\FuGaS C++\Fug_Intermediate_Project\Multiplayer_game_sim\Multiplayer_game_sim\Source.cpp(154): warning C4715: 'HeroManager::GetHeroByName': not all control paths return a value
-E:\Projects\FuGaS C++\Fug_Intermediate_Project\Multiplayer_game_sim\Multiplayer_game_sim\Source.cpp(21): warning C4715: 'operator==': not all control paths return a value
+E:\Projects\FuGaS C++\Fug_Intermediate_Project\Multiplayer_game_sim\Multiplayer_game_sim\Source.cpp(427,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+E:\Projects\FuGaS C++\Fug_Intermediate_Project\Multiplayer_game_sim\Multiplayer_game_sim\Source.cpp(116): warning C4715: 'PlayerManager::GetPlayerById': not all control paths return a value
+E:\Projects\FuGaS C++\Fug_Intermediate_Project\Multiplayer_game_sim\Multiplayer_game_sim\Source.cpp(108): warning C4715: 'PlayerManager::GetPlayerByName': not all control paths return a value
+E:\Projects\FuGaS C++\Fug_Intermediate_Project\Multiplayer_game_sim\Multiplayer_game_sim\Source.cpp(19): warning C4715: 'operator==': not all control paths return a value
   Multiplayer_game_sim.vcxproj -> E:\Projects\FuGaS C++\Fug_Intermediate_Project\Multiplayer_game_sim\Debug\Multiplayer_game_sim.exe
